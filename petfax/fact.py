@@ -1,10 +1,10 @@
 import sys
 from flask import ( Blueprint, render_template, request, redirect )
-from . import models 
+from . import models
 bp = Blueprint('fact', __name__, url_prefix="/facts")
 
-@bp.route('/', methods=['GET', 'POST']) 
-def index(): 
+@bp.route('/', methods=['GET', 'POST'])
+def index():
     if request.method == 'POST':
         print(request.form, file=sys.stderr)
         submitter = request.form['submitter']
@@ -17,11 +17,11 @@ def index():
         return redirect('/facts')
     
     results = models.Fact.query.all()
-    # for result in results:
-    #     print(result, file=sys.stderr)
+    for result in results:
+        print(f'{result.id}) {result.submitter}: {result.fact}', file=sys.stderr)
 
     return render_template('facts/index.html', facts=results)
 
 @bp.route('/new')
-def new(): 
+def new():
     return render_template('facts/new.html')
